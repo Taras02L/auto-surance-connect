@@ -13,7 +13,7 @@ import { VerificationStep } from "@/components/souscription/VerificationStep";
 import { NavigationButtons } from "@/components/souscription/NavigationButtons";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/contexts/AuthContext";
-import { toast } from "react-toastify";
+import { toast } from "@/hooks/use-toast";
 
 const Souscription = () => {
   const [currentStep, setCurrentStep] = useState(1);
