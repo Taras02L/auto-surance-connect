@@ -2,7 +2,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
-import { Shield, User, LogOut } from "lucide-react";
+import { Shield, User, LogOut, LayoutDashboard } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,6 +42,10 @@ export function Navigation() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
+                  <DropdownMenuItem onClick={() => navigate("/dashboard")}>
+                    <LayoutDashboard className="h-4 w-4 mr-2" />
+                    Tableau de bord
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate("/souscription")}>
                     Nouvelle souscription
                   </DropdownMenuItem>
