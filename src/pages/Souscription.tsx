@@ -13,6 +13,7 @@ import { VerificationStep } from "@/components/souscription/VerificationStep";
 import { NavigationButtons } from "@/components/souscription/NavigationButtons";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "react-toastify";
 
 const Souscription = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -142,6 +143,57 @@ const Souscription = () => {
     
     if (!user) {
       navigate('/login');
+      return;
+    }
+
+    // Validate required fields
+    if (!formData.firstName || !formData.lastName || !formData.phone || !formData.address) {
+      toast({
+        title: "Erreur",
+        description: "Veuillez remplir tous les champs obligatoires des informations personnelles",
+        variant: "destructive",
+      });
+      setCurrentStep(1);
+      return;
+    }
+
+    if (!formData.energy || !formData.seats || !formData.horsepower) {
+      toast({
+        title: "Erreur",
+        description: "Veuillez remplir tous les champs obligatoires du véhicule",
+        variant: "destructive",
+      });
+      setCurrentStep(2);
+      return;
+    }
+
+    if (!formData.carteGriseImage) {
+      toast({
+        title: "Erreur",
+        description: "Veuillez télécharger la carte grise",
+        variant: "destructive",
+      });
+      setCurrentStep(2);
+      return;
+    }
+
+    if (formData.insuranceCompanies.length === 0) {
+      toast({
+        title: "Erreur",
+        description: "Veuillez sélectionner au moins une compagnie d'assurance",
+        variant: "destructive",
+      });
+      setCurrentStep(4);
+      return;
+    }
+
+    if (formData.contractDurations.length === 0) {
+      toast({
+        title: "Erreur",
+        description: "Veuillez sélectionner au moins une durée de contrat",
+        variant: "destructive",
+      });
+      setCurrentStep(5);
       return;
     }
 

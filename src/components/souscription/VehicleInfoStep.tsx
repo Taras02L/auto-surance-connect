@@ -32,7 +32,7 @@ export const VehicleInfoStep = ({
       <div className="grid md:grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label htmlFor="energy">Énergie *</Label>
-          <Select onValueChange={(value) => onInputChange("energy", value)}>
+          <Select value={formData.energy} onValueChange={(value) => onInputChange("energy", value)}>
             <SelectTrigger className="border-blue-200 focus:border-blue-500">
               <SelectValue placeholder="Sélectionnez" />
             </SelectTrigger>
@@ -84,22 +84,31 @@ export const VehicleInfoStep = ({
                   <input
                     id="carteGrise"
                     type="file"
-                    accept="image/*"
+                    accept="image/*,.pdf"
                     className="hidden"
                     onChange={onImageUpload}
-                    required
                   />
                 </label>
               </div>
-              <p className="text-sm text-gray-500">PNG, JPG jusqu'à 10MB</p>
+              <p className="text-sm text-gray-500">PNG, JPG, PDF jusqu'à 10MB</p>
+              <p className="text-xs text-red-500 mt-1">* Champ obligatoire</p>
             </div>
           ) : (
             <div className="relative">
-              <img
-                src={imagePreview}
-                alt="Carte grise"
-                className="max-w-full h-auto rounded-lg"
-              />
+              {formData.carteGriseImage?.type?.startsWith('image/') ? (
+                <img
+                  src={imagePreview}
+                  alt="Carte grise"
+                  className="max-w-full h-auto rounded-lg"
+                />
+              ) : (
+                <div className="flex items-center justify-center p-4 bg-gray-100 rounded-lg">
+                  <div className="text-center">
+                    <Upload className="mx-auto h-8 w-8 text-gray-400" />
+                    <p className="text-sm text-gray-600 mt-2">{formData.carteGriseImage?.name}</p>
+                  </div>
+                </div>
+              )}
               <button
                 type="button"
                 onClick={onRemoveImage}

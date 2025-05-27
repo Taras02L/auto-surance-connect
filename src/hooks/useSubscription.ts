@@ -24,26 +24,46 @@ export const useSubscription = () => {
 
   const uploadCarteGrise = async (file: File): Promise<string | null> => {
     try {
+      console.log('Starting file upload for:', file.name);
+      
       const fileExt = file.name.split('.').pop();
       const fileName = `${user?.id}-${Date.now()}.${fileExt}`;
       const filePath = `carte-grise/${fileName}`;
 
-      const { error: uploadError } = await supabase.storage
+      console.log('Uploading to path:', filePath);
+
+      const { data, error: uploadError } = await supabase.storage
         .from('documents')
-        .upload(filePath, file);
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
       if (uploadError) {
         console.error('Upload error:', uploadError);
+        toast({
+          title: "Erreur de téléchargement",
+          description: `Erreur lors du téléchargement: ${uploadError.message}`,
+          variant: "destructive",
+        });
         return null;
       }
 
-      const { data } = supabase.storage
+      console.log('Upload successful:', data);
+
+      const { data: urlData } = supabase.storage
         .from('documents')
         .getPublicUrl(filePath);
 
-      return data.publicUrl;
+      console.log('Public URL generated:', urlData.publicUrl);
+      return urlData.publicUrl;
     } catch (error) {
       console.error('Error uploading file:', error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur inattendue s'est produite lors du téléchargement",
+        variant: "destructive",
+      });
       return null;
     }
   };
@@ -59,25 +79,26 @@ export const useSubscription = () => {
     }
 
     setIsLoading(true);
+    console.log('Starting subscription creation for user:', user.id);
 
     try {
       let carteGriseUrl = null;
 
       // Upload carte grise if provided
       if (data.carteGriseImage) {
+        console.log('Uploading carte grise image...');
         carteGriseUrl = await uploadCarteGrise(data.carteGriseImage);
         if (!carteGriseUrl) {
-          toast({
-            title: "Erreur",
-            description: "Erreur lors du téléchargement de la carte grise",
-            variant: "destructive",
-          });
+          setIsLoading(false);
           return false;
         }
+        console.log('Carte grise uploaded successfully:', carteGriseUrl);
       }
 
+      console.log('Creating subscription record...');
+      
       // Create subscription record
-      const { error } = await supabase.from('subscriptions').insert({
+      const { data: subscriptionData, error } = await supabase.from('subscriptions').insert({
         user_id: user.id,
         first_name: data.firstName,
         last_name: data.lastName,
@@ -93,14 +114,16 @@ export const useSubscription = () => {
       });
 
       if (error) {
-        console.error('Subscription error:', error);
+        console.error('Subscription creation error:', error);
         toast({
           title: "Erreur",
-          description: "Erreur lors de la soumission de la souscription",
+          description: `Erreur lors de la soumission: ${error.message}`,
           variant: "destructive",
         });
         return false;
       }
+
+      console.log('Subscription created successfully:', subscriptionData);
 
       toast({
         title: "Succès",
