@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Shield, ArrowLeft, ArrowRight } from "lucide-react";
+import { Shield, ArrowLeft, ArrowRight, Upload, X } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Souscription = () => {
@@ -15,52 +15,58 @@ const Souscription = () => {
     // Informations personnelles
     firstName: "",
     lastName: "",
-    email: "",
     phone: "",
     address: "",
     
     // Informations véhicule
-    plateNumber: "",
     energy: "",
-    brand: "",
-    model: "",
-    year: "",
-    chassisNumber: "",
+    seats: "",
+    horsepower: "",
+    carteGriseImage: null as File | null,
     
     // Garanties
-    guarantees: [] as string[],
+    guarantees: ["rc", "protection"] as string[], // RC et Protection conducteur obligatoires
     
     // Assurance
-    insuranceCompany: "",
-    contractDuration: "",
-    
-    // Conducteur
-    driverLicense: "",
-    driverAge: ""
+    insuranceCompanies: [] as string[],
+    contractDurations: [] as string[],
   });
+
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const steps = [
     { number: 1, title: "Informations personnelles" },
     { number: 2, title: "Véhicule" },
     { number: 3, title: "Garanties" },
-    { number: 4, title: "Finalisation" }
+    { number: 4, title: "Compagnies d'assurance" },
+    { number: 5, title: "Durée du contrat" },
+    { number: 6, title: "Vérification" }
   ];
 
   const guaranteeOptions = [
     { id: "rc", label: "Responsabilité Civile", required: true },
-    { id: "protection", label: "Protection du Conducteur" },
-    { id: "vol", label: "Vol" },
-    { id: "incendie", label: "Incendie" },
-    { id: "bris", label: "Bris de Glace" },
-    { id: "tous_risques", label: "Tous Risques" }
+    { id: "protection", label: "Protection du Conducteur", required: true },
+    { id: "vol_incendie", label: "Vol et Incendie" },
+    { id: "tierce_complete", label: "Tierce Complète" },
+    { id: "tierce_collision", label: "Tierce Collision" },
+    { id: "assistance_reparation", label: "Assistance à la Réparation" },
+    { id: "recours_anticipe", label: "Recours Anticipé" },
+    { id: "assistance", label: "Assistance" }
   ];
 
   const insuranceCompanies = [
-    "NSIA Assurances",
-    "SAHAM Assurance",
-    "OGAR Assurances",
-    "Allianz Togo",
-    "Beneficial Life"
+    "Sanlam",
+    "NSIA", 
+    "SUNU",
+    "GTA",
+    "Fidelia"
+  ];
+
+  const contractDurations = [
+    { value: "1_mois", label: "1 mois" },
+    { value: "3_mois", label: "3 mois" },
+    { value: "6_mois", label: "6 mois" },
+    { value: "1_an", label: "1 an" }
   ];
 
   const handleInputChange = (field: string, value: string) => {
@@ -68,6 +74,10 @@ const Souscription = () => {
   };
 
   const handleGuaranteeChange = (guaranteeId: string, checked: boolean) => {
+    if (guaranteeOptions.find(g => g.id === guaranteeId)?.required) {
+      return; // Ne pas permettre de décocher les garanties obligatoires
+    }
+    
     setFormData(prev => ({
       ...prev,
       guarantees: checked 
@@ -76,8 +86,50 @@ const Souscription = () => {
     }));
   };
 
+  const handleInsuranceCompanyChange = (company: string, checked: boolean) => {
+    setFormData(prev => {
+      const newCompanies = checked
+        ? prev.insuranceCompanies.length < 3 
+          ? [...prev.insuranceCompanies, company]
+          : prev.insuranceCompanies
+        : prev.insuranceCompanies.filter(c => c !== company);
+      
+      return { ...prev, insuranceCompanies: newCompanies };
+    });
+  };
+
+  const handleContractDurationChange = (duration: string, checked: boolean) => {
+    setFormData(prev => {
+      const newDurations = checked
+        ? prev.contractDurations.length < 2
+          ? [...prev.contractDurations, duration]
+          : prev.contractDurations
+        : prev.contractDurations.filter(d => d !== duration);
+      
+      return { ...prev, contractDurations: newDurations };
+    });
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData(prev => ({ ...prev, carteGriseImage: file }));
+      
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setFormData(prev => ({ ...prev, carteGriseImage: null }));
+    setImagePreview(null);
+  };
+
   const nextStep = () => {
-    if (currentStep < 4) setCurrentStep(currentStep + 1);
+    if (currentStep < 6) setCurrentStep(currentStep + 1);
   };
 
   const prevStep = () => {
@@ -124,7 +176,7 @@ const Souscription = () => {
                     {step.number}
                   </div>
                   <div className="ml-3 hidden sm:block">
-                    <p className={`font-medium ${
+                    <p className={`font-medium text-sm ${
                       currentStep >= step.number 
                         ? 'text-blue-600' 
                         : 'text-gray-500'
@@ -183,30 +235,17 @@ const Souscription = () => {
                         />
                       </div>
                     </div>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="email">Email *</Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          value={formData.email}
-                          onChange={(e) => handleInputChange("email", e.target.value)}
-                          required
-                          className="border-blue-200 focus:border-blue-500"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="phone">Téléphone *</Label>
-                        <Input
-                          id="phone"
-                          type="tel"
-                          placeholder="+22870443322"
-                          value={formData.phone}
-                          onChange={(e) => handleInputChange("phone", e.target.value)}
-                          required
-                          className="border-blue-200 focus:border-blue-500"
-                        />
-                      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">Téléphone *</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        placeholder="+22870443322"
+                        value={formData.phone}
+                        onChange={(e) => handleInputChange("phone", e.target.value)}
+                        required
+                        className="border-blue-200 focus:border-blue-500"
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="address">Adresse *</Label>
@@ -227,17 +266,7 @@ const Souscription = () => {
                     <h3 className="text-lg font-semibold text-blue-900 mb-4">
                       Informations du véhicule
                     </h3>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="plateNumber">Numéro d'immatriculation *</Label>
-                        <Input
-                          id="plateNumber"
-                          value={formData.plateNumber}
-                          onChange={(e) => handleInputChange("plateNumber", e.target.value)}
-                          required
-                          className="border-blue-200 focus:border-blue-500"
-                        />
-                      </div>
+                    <div className="grid md:grid-cols-3 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="energy">Énergie *</Label>
                         <Select onValueChange={(value) => handleInputChange("energy", value)}>
@@ -252,48 +281,72 @@ const Souscription = () => {
                           </SelectContent>
                         </Select>
                       </div>
-                    </div>
-                    <div className="grid md:grid-cols-3 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="brand">Marque *</Label>
+                        <Label htmlFor="seats">Nombre de places *</Label>
                         <Input
-                          id="brand"
-                          value={formData.brand}
-                          onChange={(e) => handleInputChange("brand", e.target.value)}
-                          required
-                          className="border-blue-200 focus:border-blue-500"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="model">Modèle *</Label>
-                        <Input
-                          id="model"
-                          value={formData.model}
-                          onChange={(e) => handleInputChange("model", e.target.value)}
-                          required
-                          className="border-blue-200 focus:border-blue-500"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="year">Année *</Label>
-                        <Input
-                          id="year"
+                          id="seats"
                           type="number"
-                          value={formData.year}
-                          onChange={(e) => handleInputChange("year", e.target.value)}
+                          min="2"
+                          max="50"
+                          value={formData.seats}
+                          onChange={(e) => handleInputChange("seats", e.target.value)}
+                          required
+                          className="border-blue-200 focus:border-blue-500"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="horsepower">Nombre de chevaux (Puissance) *</Label>
+                        <Input
+                          id="horsepower"
+                          type="number"
+                          min="1"
+                          value={formData.horsepower}
+                          onChange={(e) => handleInputChange("horsepower", e.target.value)}
                           required
                           className="border-blue-200 focus:border-blue-500"
                         />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="chassisNumber">Numéro de châssis</Label>
-                      <Input
-                        id="chassisNumber"
-                        value={formData.chassisNumber}
-                        onChange={(e) => handleInputChange("chassisNumber", e.target.value)}
-                        className="border-blue-200 focus:border-blue-500"
-                      />
+                      <Label htmlFor="carteGrise">Carte grise *</Label>
+                      <div className="border-2 border-dashed border-blue-200 rounded-lg p-6">
+                        {!imagePreview ? (
+                          <div className="text-center">
+                            <Upload className="mx-auto h-12 w-12 text-blue-400" />
+                            <div className="mt-2">
+                              <label htmlFor="carteGrise" className="cursor-pointer">
+                                <span className="text-blue-600 hover:text-blue-500">
+                                  Cliquez pour télécharger
+                                </span>
+                                <input
+                                  id="carteGrise"
+                                  type="file"
+                                  accept="image/*"
+                                  className="hidden"
+                                  onChange={handleImageUpload}
+                                  required
+                                />
+                              </label>
+                            </div>
+                            <p className="text-sm text-gray-500">PNG, JPG jusqu'à 10MB</p>
+                          </div>
+                        ) : (
+                          <div className="relative">
+                            <img
+                              src={imagePreview}
+                              alt="Carte grise"
+                              className="max-w-full h-auto rounded-lg"
+                            />
+                            <button
+                              type="button"
+                              onClick={removeImage}
+                              className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                            >
+                              <X className="h-4 w-4" />
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -329,40 +382,107 @@ const Souscription = () => {
                   </div>
                 )}
 
-                {/* Step 4: Finalization */}
+                {/* Step 4: Insurance Companies */}
                 {currentStep === 4 && (
                   <div className="space-y-6">
                     <h3 className="text-lg font-semibold text-blue-900 mb-4">
-                      Finalisation de votre souscription
+                      Compagnies d'assurance (maximum 3)
                     </h3>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="insuranceCompany">Compagnie d'assurance *</Label>
-                        <Select onValueChange={(value) => handleInputChange("insuranceCompany", value)}>
-                          <SelectTrigger className="border-blue-200 focus:border-blue-500">
-                            <SelectValue placeholder="Sélectionnez une compagnie" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {insuranceCompanies.map((company) => (
-                              <SelectItem key={company} value={company}>
-                                {company}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Sélectionnez jusqu'à 3 compagnies d'assurance
+                    </p>
+                    <div className="space-y-4">
+                      {insuranceCompanies.map((company) => (
+                        <div key={company} className="flex items-center space-x-3">
+                          <Checkbox
+                            id={company}
+                            checked={formData.insuranceCompanies.includes(company)}
+                            onCheckedChange={(checked) => 
+                              handleInsuranceCompanyChange(company, checked as boolean)
+                            }
+                            disabled={!formData.insuranceCompanies.includes(company) && formData.insuranceCompanies.length >= 3}
+                            className="border-blue-300"
+                          />
+                          <Label htmlFor={company}>{company}</Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Step 5: Contract Duration */}
+                {currentStep === 5 && (
+                  <div className="space-y-6">
+                    <h3 className="text-lg font-semibold text-blue-900 mb-4">
+                      Durée du contrat (maximum 2)
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Sélectionnez jusqu'à 2 durées de contrat
+                    </p>
+                    <div className="space-y-4">
+                      {contractDurations.map((duration) => (
+                        <div key={duration.value} className="flex items-center space-x-3">
+                          <Checkbox
+                            id={duration.value}
+                            checked={formData.contractDurations.includes(duration.value)}
+                            onCheckedChange={(checked) => 
+                              handleContractDurationChange(duration.value, checked as boolean)
+                            }
+                            disabled={!formData.contractDurations.includes(duration.value) && formData.contractDurations.length >= 2}
+                            className="border-blue-300"
+                          />
+                          <Label htmlFor={duration.value}>{duration.label}</Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Step 6: Verification */}
+                {currentStep === 6 && (
+                  <div className="space-y-6">
+                    <h3 className="text-lg font-semibold text-blue-900 mb-4">
+                      Vérification des informations
+                    </h3>
+                    <div className="space-y-4 bg-blue-50 p-4 rounded-lg">
+                      <div>
+                        <h4 className="font-semibold text-blue-900">Informations personnelles</h4>
+                        <p>Nom: {formData.firstName} {formData.lastName}</p>
+                        <p>Téléphone: {formData.phone}</p>
+                        <p>Adresse: {formData.address}</p>
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="contractDuration">Durée du contrat *</Label>
-                        <Select onValueChange={(value) => handleInputChange("contractDuration", value)}>
-                          <SelectTrigger className="border-blue-200 focus:border-blue-500">
-                            <SelectValue placeholder="Sélectionnez la durée" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="1_an">1 an</SelectItem>
-                            <SelectItem value="6_mois">6 mois</SelectItem>
-                            <SelectItem value="3_mois">3 mois</SelectItem>
-                          </SelectContent>
-                        </Select>
+                      <div>
+                        <h4 className="font-semibold text-blue-900">Véhicule</h4>
+                        <p>Énergie: {formData.energy}</p>
+                        <p>Nombre de places: {formData.seats}</p>
+                        <p>Puissance: {formData.horsepower} chevaux</p>
+                        <p>Carte grise: {formData.carteGriseImage ? 'Téléchargée' : 'Non téléchargée'}</p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-blue-900">Garanties sélectionnées</h4>
+                        <ul className="list-disc list-inside">
+                          {formData.guarantees.map(guaranteeId => {
+                            const guarantee = guaranteeOptions.find(g => g.id === guaranteeId);
+                            return <li key={guaranteeId}>{guarantee?.label}</li>;
+                          })}
+                        </ul>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-blue-900">Compagnies d'assurance</h4>
+                        <ul className="list-disc list-inside">
+                          {formData.insuranceCompanies.map(company => (
+                            <li key={company}>{company}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-blue-900">Durées de contrat</h4>
+                        <ul className="list-disc list-inside">
+                          {formData.contractDurations.map(durationValue => {
+                            const duration = contractDurations.find(d => d.value === durationValue);
+                            return <li key={durationValue}>{duration?.label}</li>;
+                          })}
+                        </ul>
                       </div>
                     </div>
                   </div>
@@ -382,7 +502,7 @@ const Souscription = () => {
                     </Button>
                   )}
                   
-                  {currentStep < 4 ? (
+                  {currentStep < 6 ? (
                     <Button 
                       type="button" 
                       onClick={nextStep}
