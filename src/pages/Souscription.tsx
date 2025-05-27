@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { StepIndicator } from "@/components/souscription/StepIndicator";
 import { PersonalInfoStep } from "@/components/souscription/PersonalInfoStep";
 import { VehicleInfoStep } from "@/components/souscription/VehicleInfoStep";
@@ -12,6 +11,8 @@ import { InsuranceCompaniesStep } from "@/components/souscription/InsuranceCompa
 import { ContractDurationStep } from "@/components/souscription/ContractDurationStep";
 import { VerificationStep } from "@/components/souscription/VerificationStep";
 import { NavigationButtons } from "@/components/souscription/NavigationButtons";
+import { useSubscription } from "@/hooks/useSubscription";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Souscription = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -30,6 +31,9 @@ const Souscription = () => {
   });
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const { createSubscription, isLoading } = useSubscription();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const steps = [
     { number: 1, title: "Informations personnelles" },
@@ -133,9 +137,33 @@ const Souscription = () => {
     if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Souscription data:", formData);
+    
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    const success = await createSubscription(formData);
+    if (success) {
+      // Reset form or redirect user
+      setFormData({
+        firstName: "",
+        lastName: "",
+        phone: "",
+        address: "",
+        energy: "",
+        seats: "",
+        horsepower: "",
+        carteGriseImage: null,
+        guarantees: ["rc", "protection"],
+        insuranceCompanies: [],
+        contractDurations: [],
+      });
+      setImagePreview(null);
+      setCurrentStep(1);
+    }
   };
 
   const renderCurrentStep = () => {
@@ -233,6 +261,7 @@ const Souscription = () => {
                   totalSteps={steps.length}
                   onPrevStep={prevStep}
                   onNextStep={nextStep}
+                  isLoading={isLoading}
                 />
               </form>
             </CardContent>

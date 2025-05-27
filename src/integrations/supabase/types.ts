@@ -39,6 +39,60 @@ export type Database = {
         }
         Relationships: []
       }
+      subscriptions: {
+        Row: {
+          address: string
+          carte_grise_url: string | null
+          contract_durations: string[]
+          created_at: string
+          energy: string
+          first_name: string
+          guarantees: string[]
+          horsepower: number
+          id: string
+          insurance_companies: string[]
+          last_name: string
+          phone: string
+          seats: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address: string
+          carte_grise_url?: string | null
+          contract_durations: string[]
+          created_at?: string
+          energy: string
+          first_name: string
+          guarantees: string[]
+          horsepower: number
+          id?: string
+          insurance_companies: string[]
+          last_name: string
+          phone: string
+          seats: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string
+          carte_grise_url?: string | null
+          contract_durations?: string[]
+          created_at?: string
+          energy?: string
+          first_name?: string
+          guarantees?: string[]
+          horsepower?: number
+          id?: string
+          insurance_companies?: string[]
+          last_name?: string
+          phone?: string
+          seats?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

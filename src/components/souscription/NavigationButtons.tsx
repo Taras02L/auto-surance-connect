@@ -1,19 +1,21 @@
 
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 
 interface NavigationButtonsProps {
   currentStep: number;
   totalSteps: number;
   onPrevStep: () => void;
   onNextStep: () => void;
+  isLoading?: boolean;
 }
 
 export const NavigationButtons = ({ 
   currentStep, 
   totalSteps, 
   onPrevStep, 
-  onNextStep 
+  onNextStep,
+  isLoading = false
 }: NavigationButtonsProps) => {
   return (
     <div className="flex justify-between mt-8">
@@ -23,6 +25,7 @@ export const NavigationButtons = ({
           variant="outline" 
           onClick={onPrevStep}
           className="border-blue-600 text-blue-600 hover:bg-blue-50"
+          disabled={isLoading}
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Précédent
@@ -34,6 +37,7 @@ export const NavigationButtons = ({
           type="button" 
           onClick={onNextStep}
           className="bg-blue-600 hover:bg-blue-700 ml-auto"
+          disabled={isLoading}
         >
           Suivant
           <ArrowRight className="w-4 h-4 ml-2" />
@@ -42,8 +46,16 @@ export const NavigationButtons = ({
         <Button 
           type="submit"
           className="bg-blue-600 hover:bg-blue-700 ml-auto"
+          disabled={isLoading}
         >
-          Finaliser la souscription
+          {isLoading ? (
+            <>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              En cours...
+            </>
+          ) : (
+            "Finaliser la souscription"
+          )}
         </Button>
       )}
     </div>
