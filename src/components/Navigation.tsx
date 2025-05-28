@@ -1,4 +1,3 @@
-
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
@@ -23,20 +22,21 @@ export function Navigation() {
       if (!user) return;
 
       try {
-        const { data, error } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', user.id)
-          .eq('role', 'admin')
-          .single();
+        // Use RPC to call our security definer function
+        const { data, error } = await supabase.rpc('has_role', {
+          _user_id: user.id,
+          _role: 'admin'
+        });
 
-        if (error && error.code !== 'PGRST116') {
+        if (error) {
           console.error('Error checking admin role:', error);
+          setIsAdmin(false);
+        } else {
+          setIsAdmin(data === true);
         }
-
-        setIsAdmin(!!data);
       } catch (error) {
         console.error('Error checking admin role:', error);
+        setIsAdmin(false);
       }
     };
 
