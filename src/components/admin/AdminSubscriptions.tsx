@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,7 @@ interface Subscription {
   status: string;
   admin_comments: string | null;
   user_id: string;
+  carte_grise_url: string | null;
 }
 
 export const AdminSubscriptions = () => {
@@ -34,29 +36,29 @@ export const AdminSubscriptions = () => {
   const [selectedSubscription, setSelectedSubscription] = useState<Subscription | null>(null);
   const { user } = useAuth();
 
+  const fetchSubscriptions = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('subscriptions')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setSubscriptions(data || []);
+    } catch (error) {
+      console.error('Error fetching subscriptions:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de charger les souscriptions",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchSubscriptions = async () => {
-      setLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from('subscriptions')
-          .select('*')
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-        setSubscriptions(data || []);
-      } catch (error) {
-        console.error('Error fetching subscriptions:', error);
-        toast({
-          title: "Erreur",
-          description: "Impossible de charger les souscriptions",
-          variant: "destructive",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchSubscriptions();
   }, [user]);
 
