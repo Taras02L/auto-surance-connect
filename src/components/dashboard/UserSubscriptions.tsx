@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
-import { FileText, Calendar, Shield, Car } from "lucide-react";
+import { FileText, Calendar, Shield, Car, CheckCircle, Clock, AlertCircle, XCircle, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface Subscription {
@@ -22,6 +22,8 @@ interface Subscription {
   insurance_companies: string[];
   contract_durations: string[];
   created_at: string;
+  status: string;
+  admin_comments: string | null;
 }
 
 export const UserSubscriptions = () => {
@@ -63,6 +65,19 @@ export const UserSubscriptions = () => {
       month: '2-digit',
       year: 'numeric'
     });
+  };
+
+  const getStatusInfo = (status: string) => {
+    const statusInfo = {
+      pending: { label: 'En attente', icon: Clock, color: 'bg-yellow-50 text-yellow-700 border-yellow-200' },
+      in_review: { label: 'En cours d\'examen', icon: Settings, color: 'bg-blue-50 text-blue-700 border-blue-200' },
+      processing: { label: 'En traitement', icon: Settings, color: 'bg-purple-50 text-purple-700 border-purple-200' },
+      approved: { label: 'Approuvée', icon: CheckCircle, color: 'bg-green-50 text-green-700 border-green-200' },
+      rejected: { label: 'Rejetée', icon: XCircle, color: 'bg-red-50 text-red-700 border-red-200' },
+    }[status] || { label: 'En attente', icon: Clock, color: 'bg-gray-100 text-gray-700 border-gray-200' };
+    
+    const Icon = statusInfo.icon;
+    return { ...statusInfo, Icon };
   };
 
   const getGuaranteeLabel = (guarantee: string) => {
@@ -130,83 +145,95 @@ export const UserSubscriptions = () => {
         </Card>
       ) : (
         <div className="grid gap-6">
-          {subscriptions.map((subscription) => (
-            <Card key={subscription.id} className="border-blue-200">
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-lg text-blue-900">
-                      Souscription #{subscription.id.slice(0, 8)}
-                    </CardTitle>
-                    <CardDescription>
-                      Créée le {formatDate(subscription.created_at)}
-                    </CardDescription>
-                  </div>
-                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                    En attente
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-blue-900 flex items-center gap-2">
-                      <Car className="h-4 w-4" />
-                      Véhicule
-                    </h4>
-                    <div className="text-sm text-gray-600 space-y-1">
-                      <p>Énergie: {subscription.energy}</p>
-                      <p>Places: {subscription.seats}</p>
-                      <p>Puissance: {subscription.horsepower} chevaux</p>
+          {subscriptions.map((subscription) => {
+            const statusInfo = getStatusInfo(subscription.status);
+            
+            return (
+              <Card key={subscription.id} className="border-blue-200">
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <CardTitle className="text-lg text-blue-900">
+                        Souscription #{subscription.id.slice(0, 8)}
+                      </CardTitle>
+                      <CardDescription>
+                        Créée le {formatDate(subscription.created_at)}
+                      </CardDescription>
                     </div>
+                    <Badge variant="outline" className={statusInfo.color}>
+                      <statusInfo.Icon className="h-3 w-3 mr-1" />
+                      {statusInfo.label}
+                    </Badge>
                   </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {subscription.admin_comments && (
+                    <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                      <p className="text-sm font-medium text-blue-800 mb-1">Note de l'assureur:</p>
+                      <p className="text-sm text-blue-700">{subscription.admin_comments}</p>
+                    </div>
+                  )}
                   
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-blue-900 flex items-center gap-2">
-                      <Shield className="h-4 w-4" />
-                      Garanties
-                    </h4>
-                    <div className="flex flex-wrap gap-1">
-                      {subscription.guarantees.map((guarantee) => (
-                        <Badge key={guarantee} variant="secondary" className="text-xs">
-                          {getGuaranteeLabel(guarantee)}
-                        </Badge>
-                      ))}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <h4 className="font-medium text-blue-900 flex items-center gap-2">
+                        <Car className="h-4 w-4" />
+                        Véhicule
+                      </h4>
+                      <div className="text-sm text-gray-600 space-y-1">
+                        <p>Énergie: {subscription.energy}</p>
+                        <p>Places: {subscription.seats}</p>
+                        <p>Puissance: {subscription.horsepower} chevaux</p>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <h4 className="font-medium text-blue-900 flex items-center gap-2">
+                        <Shield className="h-4 w-4" />
+                        Garanties
+                      </h4>
+                      <div className="flex flex-wrap gap-1">
+                        {subscription.guarantees.map((guarantee) => (
+                          <Badge key={guarantee} variant="secondary" className="text-xs">
+                            {getGuaranteeLabel(guarantee)}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-blue-900">
-                      Compagnies d'assurance
-                    </h4>
-                    <div className="flex flex-wrap gap-1">
-                      {subscription.insurance_companies.map((company) => (
-                        <Badge key={company} variant="outline" className="text-xs">
-                          {company}
-                        </Badge>
-                      ))}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <h4 className="font-medium text-blue-900">
+                        Compagnies d'assurance
+                      </h4>
+                      <div className="flex flex-wrap gap-1">
+                        {subscription.insurance_companies.map((company) => (
+                          <Badge key={company} variant="outline" className="text-xs">
+                            {company}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <h4 className="font-medium text-blue-900 flex items-center gap-2">
+                        <Calendar className="h-4 w-4" />
+                        Durées demandées
+                      </h4>
+                      <div className="flex flex-wrap gap-1">
+                        {subscription.contract_durations.map((duration) => (
+                          <Badge key={duration} variant="outline" className="text-xs">
+                            {getDurationLabel(duration)}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                  
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-blue-900 flex items-center gap-2">
-                      <Calendar className="h-4 w-4" />
-                      Durées demandées
-                    </h4>
-                    <div className="flex flex-wrap gap-1">
-                      {subscription.contract_durations.map((duration) => (
-                        <Badge key={duration} variant="outline" className="text-xs">
-                          {getDurationLabel(duration)}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       )}
     </div>

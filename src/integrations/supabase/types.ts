@@ -42,6 +42,7 @@ export type Database = {
       subscriptions: {
         Row: {
           address: string
+          admin_comments: string | null
           carte_grise_url: string | null
           contract_durations: string[]
           created_at: string
@@ -54,11 +55,14 @@ export type Database = {
           last_name: string
           phone: string
           seats: number
+          status: Database["public"]["Enums"]["subscription_status"]
           updated_at: string
+          updated_by: string | null
           user_id: string
         }
         Insert: {
           address: string
+          admin_comments?: string | null
           carte_grise_url?: string | null
           contract_durations: string[]
           created_at?: string
@@ -71,11 +75,14 @@ export type Database = {
           last_name: string
           phone: string
           seats: number
+          status?: Database["public"]["Enums"]["subscription_status"]
           updated_at?: string
+          updated_by?: string | null
           user_id: string
         }
         Update: {
           address?: string
+          admin_comments?: string | null
           carte_grise_url?: string | null
           contract_durations?: string[]
           created_at?: string
@@ -88,7 +95,9 @@ export type Database = {
           last_name?: string
           phone?: string
           seats?: number
+          status?: Database["public"]["Enums"]["subscription_status"]
           updated_at?: string
+          updated_by?: string | null
           user_id?: string
         }
         Relationships: []
@@ -129,6 +138,12 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      subscription_status:
+        | "pending"
+        | "in_review"
+        | "approved"
+        | "rejected"
+        | "processing"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -245,6 +260,13 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      subscription_status: [
+        "pending",
+        "in_review",
+        "approved",
+        "rejected",
+        "processing",
+      ],
     },
   },
 } as const
