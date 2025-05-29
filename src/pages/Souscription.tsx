@@ -138,9 +138,12 @@ const Souscription = () => {
     if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
+    // Empêcher la soumission automatique du formulaire
     e.preventDefault();
-    
+  };
+
+  const handleFinalSubmit = async () => {
     if (!user) {
       navigate('/login');
       return;
@@ -306,13 +309,14 @@ const Souscription = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleFormSubmit}>
                 {renderCurrentStep()}
                 <NavigationButtons 
                   currentStep={currentStep}
                   totalSteps={steps.length}
                   onPrevStep={prevStep}
                   onNextStep={nextStep}
+                  onSubmit={handleFinalSubmit}
                   isLoading={isLoading}
                 />
               </form>

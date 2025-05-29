@@ -7,6 +7,7 @@ interface NavigationButtonsProps {
   totalSteps: number;
   onPrevStep: () => void;
   onNextStep: () => void;
+  onSubmit?: () => void;
   isLoading?: boolean;
 }
 
@@ -15,6 +16,7 @@ export const NavigationButtons = ({
   totalSteps, 
   onPrevStep, 
   onNextStep,
+  onSubmit,
   isLoading = false
 }: NavigationButtonsProps) => {
   return (
@@ -44,7 +46,8 @@ export const NavigationButtons = ({
         </Button>
       ) : (
         <Button 
-          type="submit"
+          type="button"
+          onClick={onSubmit}
           className="bg-blue-600 hover:bg-blue-700 ml-auto"
           disabled={isLoading}
         >
