@@ -6,7 +6,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminUsers } from "@/components/admin/AdminUsers";
 import { AdminSubscriptions } from "@/components/admin/AdminSubscriptions";
 import { AdminStats } from "@/components/admin/AdminStats";
-import { Shield, Users, FileText, BarChart3 } from "lucide-react";
+import { AdminDocuments } from "@/components/admin/AdminDocuments";
+import { Shield, Users, FileText, BarChart3, FolderOpen } from "lucide-react";
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -80,7 +81,7 @@ const Admin = () => {
           </div>
 
           <Tabs defaultValue="stats" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="stats" className="flex items-center gap-2">
                 <BarChart3 className="h-4 w-4" />
                 Statistiques
@@ -92,6 +93,10 @@ const Admin = () => {
               <TabsTrigger value="subscriptions" className="flex items-center gap-2">
                 <FileText className="h-4 w-4" />
                 Souscriptions
+              </TabsTrigger>
+              <TabsTrigger value="documents" className="flex items-center gap-2">
+                <FolderOpen className="h-4 w-4" />
+                Documents
               </TabsTrigger>
             </TabsList>
 
@@ -105,6 +110,10 @@ const Admin = () => {
 
             <TabsContent value="subscriptions">
               <AdminSubscriptions />
+            </TabsContent>
+
+            <TabsContent value="documents">
+              <AdminDocuments />
             </TabsContent>
           </Tabs>
         </div>

@@ -2,7 +2,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Upload, X } from "lucide-react";
+import { Upload, X, CheckCircle } from "lucide-react";
 
 interface VehicleInfoStepProps {
   formData: {
@@ -24,6 +24,35 @@ export const VehicleInfoStep = ({
   onRemoveImage, 
   imagePreview 
 }: VehicleInfoStepProps) => {
+  const isValidImageType = (file: File) => {
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf'];
+    return validTypes.includes(file.type);
+  };
+
+  const getFileSize = (file: File) => {
+    const sizeInMB = file.size / (1024 * 1024);
+    return sizeInMB.toFixed(2);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!isValidImageType(file)) {
+        alert('Format de fichier non supporté. Veuillez choisir une image (JPG, PNG, GIF) ou un PDF.');
+        return;
+      }
+      
+      // Validate file size (max 10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        alert('Le fichier est trop volumineux. La taille maximale autorisée est de 10MB.');
+        return;
+      }
+      
+      onImageUpload(e);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-blue-900 mb-4">
@@ -86,36 +115,69 @@ export const VehicleInfoStep = ({
                     type="file"
                     accept="image/*,.pdf"
                     className="hidden"
-                    onChange={onImageUpload}
+                    onChange={handleFileChange}
                   />
                 </label>
               </div>
-              <p className="text-sm text-gray-500">PNG, JPG, PDF jusqu'à 10MB</p>
+              <p className="text-sm text-gray-500 mt-2">PNG, JPG, PDF jusqu'à 10MB</p>
               <p className="text-xs text-red-500 mt-1">* Champ obligatoire</p>
+              <div className="mt-3 text-xs text-gray-400">
+                <p>✓ Formats acceptés: JPG, PNG, GIF, PDF</p>
+                <p>✓ Taille maximum: 10MB</p>
+                <p>✓ Document sécurisé et crypté</p>
+              </div>
             </div>
           ) : (
             <div className="relative">
+              <div className="flex items-center justify-center mb-2">
+                <CheckCircle className="h-6 w-6 text-green-500 mr-2" />
+                <span className="text-green-600 font-medium">Document téléchargé avec succès</span>
+              </div>
+              
               {formData.carteGriseImage?.type?.startsWith('image/') ? (
                 <img
                   src={imagePreview}
                   alt="Carte grise"
-                  className="max-w-full h-auto rounded-lg"
+                  className="max-w-full h-auto rounded-lg mx-auto"
+                  style={{ maxHeight: '300px' }}
                 />
               ) : (
                 <div className="flex items-center justify-center p-4 bg-gray-100 rounded-lg">
                   <div className="text-center">
                     <Upload className="mx-auto h-8 w-8 text-gray-400" />
-                    <p className="text-sm text-gray-600 mt-2">{formData.carteGriseImage?.name}</p>
+                    <p className="text-sm text-gray-600 mt-2 font-medium">{formData.carteGriseImage?.name}</p>
+                    {formData.carteGriseImage && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        Taille: {getFileSize(formData.carteGriseImage)} MB
+                      </p>
+                    )}
                   </div>
                 </div>
               )}
-              <button
-                type="button"
-                onClick={onRemoveImage}
-                className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
-              >
-                <X className="h-4 w-4" />
-              </button>
+              
+              <div className="flex justify-center mt-4 gap-2">
+                <button
+                  type="button"
+                  onClick={onRemoveImage}
+                  className="flex items-center px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 text-sm"
+                >
+                  <X className="h-4 w-4 mr-1" />
+                  Supprimer
+                </button>
+                <label htmlFor="carteGrise-replace" className="cursor-pointer">
+                  <span className="flex items-center px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 text-sm">
+                    <Upload className="h-4 w-4 mr-1" />
+                    Remplacer
+                  </span>
+                  <input
+                    id="carteGrise-replace"
+                    type="file"
+                    accept="image/*,.pdf"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                </label>
+              </div>
             </div>
           )}
         </div>
