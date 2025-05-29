@@ -1,3 +1,4 @@
+
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigation } from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,7 +27,7 @@ const Admin = () => {
         // Use RPC to call our security definer function
         const { data, error } = await supabase.rpc('has_role', {
           _user_id: user.id,
-          _role: 'admin'
+          _role: 'admin' as any
         });
 
         if (error) {

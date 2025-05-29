@@ -1,3 +1,4 @@
+
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
@@ -25,7 +26,7 @@ export function Navigation() {
         // Use RPC to call our security definer function
         const { data, error } = await supabase.rpc('has_role', {
           _user_id: user.id,
-          _role: 'admin'
+          _role: 'admin' as any
         });
 
         if (error) {
