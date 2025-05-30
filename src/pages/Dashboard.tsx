@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserSubscriptions } from "@/components/dashboard/UserSubscriptions";
 import { UserProfile } from "@/components/dashboard/UserProfile";
+import { ClientRequests } from "@/components/dashboard/ClientRequests";
 import { Shield, FileText, User } from "lucide-react";
 import { Navigate } from "react-router-dom";
 
