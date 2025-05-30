@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserSubscriptions } from "@/components/dashboard/UserSubscriptions";
 import { UserProfile } from "@/components/dashboard/UserProfile";
 import { ClientRequests } from "@/components/dashboard/ClientRequests";
-import { Shield, FileText, User } from "lucide-react";
+import { Shield, FileText, User, MessageSquare } from "lucide-react";
 import { Navigate } from "react-router-dom";
 
 const Dashboard = () => {
@@ -35,15 +35,19 @@ const Dashboard = () => {
               Espace Personnel
             </h1>
             <p className="text-gray-600">
-              Gérez vos souscriptions et votre profil
+              Gérez vos souscriptions, demandes et votre profil
             </p>
           </div>
 
           <Tabs defaultValue="subscriptions" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="subscriptions" className="flex items-center gap-2">
                 <FileText className="h-4 w-4" />
                 Mes Souscriptions
+              </TabsTrigger>
+              <TabsTrigger value="requests" className="flex items-center gap-2">
+                <MessageSquare className="h-4 w-4" />
+                Mes Demandes
               </TabsTrigger>
               <TabsTrigger value="profile" className="flex items-center gap-2">
                 <User className="h-4 w-4" />
@@ -53,6 +57,10 @@ const Dashboard = () => {
 
             <TabsContent value="subscriptions">
               <UserSubscriptions />
+            </TabsContent>
+
+            <TabsContent value="requests">
+              <ClientRequests />
             </TabsContent>
 
             <TabsContent value="profile">
