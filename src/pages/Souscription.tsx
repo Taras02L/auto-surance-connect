@@ -11,6 +11,7 @@ import { InsuranceCompaniesStep } from "@/components/souscription/InsuranceCompa
 import { ContractDurationStep } from "@/components/souscription/ContractDurationStep";
 import { VerificationStep } from "@/components/souscription/VerificationStep";
 import { NavigationButtons } from "@/components/souscription/NavigationButtons";
+import { SuccessMessage } from "@/components/souscription/SuccessMessage";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
@@ -19,6 +20,7 @@ const Souscription = () => {
   console.log('Souscription component is rendering');
   
   const [currentStep, setCurrentStep] = useState(1);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -204,23 +206,32 @@ const Souscription = () => {
 
     const success = await createSubscription(formData);
     if (success) {
-      // Reset form or redirect user
-      setFormData({
-        firstName: "",
-        lastName: "",
-        phone: "",
-        address: "",
-        energy: "",
-        seats: "",
-        horsepower: "",
-        carteGriseImage: null,
-        guarantees: ["rc", "protection"],
-        insuranceCompanies: [],
-        contractDurations: [],
-      });
-      setImagePreview(null);
-      setCurrentStep(1);
+      setShowSuccess(true);
     }
+  };
+
+  const handleReturnHome = () => {
+    navigate('/');
+  };
+
+  const handleNewSubscription = () => {
+    // Reset form
+    setFormData({
+      firstName: "",
+      lastName: "",
+      phone: "",
+      address: "",
+      energy: "",
+      seats: "",
+      horsepower: "",
+      carteGriseImage: null,
+      guarantees: ["rc", "protection"],
+      insuranceCompanies: [],
+      contractDurations: [],
+    });
+    setImagePreview(null);
+    setCurrentStep(1);
+    setShowSuccess(false);
   };
 
   const renderCurrentStep = () => {
@@ -281,6 +292,37 @@ const Souscription = () => {
   };
 
   console.log('About to render Souscription UI');
+
+  if (showSuccess) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+        <header className="bg-blue-900 text-white shadow-lg">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <Link to="/" className="flex items-center space-x-2">
+                <Shield className="h-8 w-8 text-blue-300" />
+                <h1 className="text-2xl font-bold">2AL Insurance</h1>
+              </Link>
+              <Link to="/login">
+                <Button variant="outline" className="text-blue-900 border-white hover:bg-blue-100">
+                  Connexion
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </header>
+
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-4xl mx-auto">
+            <SuccessMessage 
+              onReturnHome={handleReturnHome}
+              onNewSubscription={handleNewSubscription}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">

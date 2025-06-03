@@ -57,7 +57,7 @@ export const NavigationButtons = ({
               En cours...
             </>
           ) : (
-            "Finaliser la souscription"
+            "Envoyer la demande"
           )}
         </Button>
       )}
