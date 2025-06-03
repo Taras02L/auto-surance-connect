@@ -16,6 +16,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 
 const Souscription = () => {
+  console.log('Souscription component is rendering');
+  
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -222,6 +224,7 @@ const Souscription = () => {
   };
 
   const renderCurrentStep = () => {
+    console.log('Rendering step:', currentStep);
     switch (currentStep) {
       case 1:
         return (
@@ -276,6 +279,8 @@ const Souscription = () => {
         return null;
     }
   };
+
+  console.log('About to render Souscription UI');
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
