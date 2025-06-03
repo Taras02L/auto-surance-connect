@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -55,7 +54,8 @@ export const AdminClientRequests = () => {
       }
       
       console.log('Fetched requests:', data);
-      setRequests(data || []);
+      // Type assertion to handle the potential mismatch
+      setRequests((data as unknown as ClientRequestWithProfile[]) || []);
     } catch (error) {
       console.error('Error fetching requests:', error);
       toast({
