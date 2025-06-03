@@ -54,8 +54,7 @@ export const AdminClientRequests = () => {
       }
       
       console.log('Fetched requests:', data);
-      // Type assertion to handle the potential mismatch
-      setRequests((data as unknown as ClientRequestWithProfile[]) || []);
+      setRequests((data as ClientRequestWithProfile[]) || []);
     } catch (error) {
       console.error('Error fetching requests:', error);
       toast({
