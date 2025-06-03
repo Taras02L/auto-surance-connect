@@ -1,4 +1,5 @@
 
+import React from "react";
 import { insuranceRequests, additionalServices } from "./request-types";
 import { Badge } from "@/components/ui/badge";
 
