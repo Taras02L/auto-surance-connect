@@ -12,11 +12,21 @@ import { MessageSquare, Search, FileText, Car, Calendar, User } from "lucide-rea
 import { ClientRequest } from "../dashboard/request-types";
 import { getRequestLabel, getStatusBadge } from "../dashboard/request-utils";
 
+interface UserProfile {
+  first_name: string;
+  last_name: string;
+  phone: string;
+}
+
+interface ClientRequestWithProfile extends ClientRequest {
+  profiles: UserProfile | null;
+}
+
 export const AdminClientRequests = () => {
-  const [requests, setRequests] = useState<ClientRequest[]>([]);
+  const [requests, setRequests] = useState<ClientRequestWithProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedRequest, setSelectedRequest] = useState<ClientRequest | null>(null);
+  const [selectedRequest, setSelectedRequest] = useState<ClientRequestWithProfile | null>(null);
   const [adminResponse, setAdminResponse] = useState("");
   const [newStatus, setNewStatus] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
@@ -39,7 +49,12 @@ export const AdminClientRequests = () => {
         `)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+      
+      console.log('Fetched requests:', data);
       setRequests(data || []);
     } catch (error) {
       console.error('Error fetching requests:', error);
@@ -99,7 +114,7 @@ export const AdminClientRequests = () => {
   };
 
   const filteredRequests = requests.filter(request => {
-    const profile = request.profiles as any;
+    const profile = request.profiles;
     const fullName = profile ? `${profile.first_name} ${profile.last_name}` : '';
     return (
       fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -143,7 +158,7 @@ export const AdminClientRequests = () => {
           </Card>
         ) : (
           filteredRequests.map((request) => {
-            const profile = request.profiles as any;
+            const profile = request.profiles;
             return (
               <Card key={request.id} className="border-blue-200">
                 <CardHeader>

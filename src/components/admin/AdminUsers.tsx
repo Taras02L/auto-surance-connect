@@ -33,7 +33,12 @@ export const AdminUsers = () => {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+      
+      console.log('Fetched users:', data);
       setUsers(data || []);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -50,7 +55,7 @@ export const AdminUsers = () => {
   const filteredUsers = users.filter(user => 
     user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.phone.includes(searchTerm)
+    (user.phone && user.phone.includes(searchTerm))
   );
 
   if (loading) {
