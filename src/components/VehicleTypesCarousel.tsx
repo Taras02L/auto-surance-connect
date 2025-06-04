@@ -1,6 +1,7 @@
 
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
+import Autoplay from "embla-carousel-autoplay";
 
 const VehicleTypesCarousel = () => {
   const vehicleTypes = [
@@ -42,12 +43,17 @@ const VehicleTypesCarousel = () => {
         <h3 className="text-3xl font-bold text-center text-blue-900 mb-12">
           Quels engins souscrire ?
         </h3>
-        <div className="max-w-4xl mx-auto">
+        <div className="w-full">
           <Carousel 
             opts={{
               align: "start",
               loop: true,
             }}
+            plugins={[
+              Autoplay({
+                delay: 3000,
+              }),
+            ]}
             className="w-full"
           >
             <CarouselContent className="-ml-2 md:-ml-4">
