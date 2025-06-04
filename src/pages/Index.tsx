@@ -1,8 +1,8 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield, Users, FileText, Award, Phone, Mail, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
+import VehicleTypesCarousel from "@/components/VehicleTypesCarousel";
 
 const Index = () => {
   return (
@@ -64,6 +64,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Vehicle Types Carousel Section */}
+      <VehicleTypesCarousel />
 
       {/* Features Section with Images */}
       <section className="py-16 px-4 bg-gray-50">
