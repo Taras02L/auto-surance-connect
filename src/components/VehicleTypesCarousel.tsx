@@ -1,7 +1,7 @@
 
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
-import Autoplay from "embla-carousel-autoplay";
+import { useEffect, useRef } from "react";
 
 const VehicleTypesCarousel = () => {
   const vehicleTypes = [
@@ -49,11 +49,6 @@ const VehicleTypesCarousel = () => {
               align: "start",
               loop: true,
             }}
-            plugins={[
-              Autoplay({
-                delay: 3000,
-              }),
-            ]}
             className="w-full"
           >
             <CarouselContent className="-ml-2 md:-ml-4">
