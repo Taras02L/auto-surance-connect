@@ -13,7 +13,7 @@ const About = () => {
         <div 
           className="absolute inset-0 bg-black opacity-30"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80')`,
+            backgroundImage: `url('/images/apropos.png')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -21,10 +21,10 @@ const About = () => {
         ></div>
         <div className="container mx-auto text-center relative z-10">
           <h1 className="text-5xl font-bold text-white mb-6">
-            À Propos de 2AL Insurance
+            À Propos de 2AS
           </h1>
           <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-            Votre partenaire de confiance pour l'assurance automobile au Togo depuis plus de 10 ans.
+            Votre partenaire de confiance pour l'assurance automobile au Togo.
           </p>
         </div>
       </section>

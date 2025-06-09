@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield, Users, FileText, Award, Phone, Mail, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
+import VehicleTypesCarousel from "@/components/VehicleTypesCarousel";
+import ServiceTypesCarousel from "@/components/ServiceTypesCarousel";
+import PartnersSection from "@/components/PartnersSection";
 
 const Index = () => {
   return (
@@ -12,8 +15,8 @@ const Index = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <Shield className="h-8 w-8 text-blue-300" />
-              <h1 className="text-2xl font-bold">2AL Insurance</h1>
+              <img src="/images/logo2AL50.png" alt="Logo 2AL" />
+              <h1 className="text-2xl font-bold">Auto Assur Services</h1>
             </div>
             <nav className="hidden md:flex items-center space-x-6">
               <Link to="/" className="hover:text-blue-300 transition-colors">Accueil</Link>
@@ -41,19 +44,21 @@ const Index = () => {
         <div 
           className="absolute inset-0 bg-black opacity-20"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80')`,
+            backgroundImage: `url('/images/Photo 1.png')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
           }}
         ></div>
         <div className="container mx-auto text-center relative z-10">
+          <h1 className="text-2xl text-white mb-6">Bienvenue sur 2AS</h1>
           <h2 className="text-5xl font-bold text-white mb-6">
-            Votre Assurance Auto en Quelques Clics
+            L’assurance automobile, réinventée pour vous
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-            Souscrivez facilement à votre assurance automobile avec 2AL. 
-            Des garanties complètes, des tarifs compétitifs et un service client de qualité.
+            Souscrivez, gérez et renouvelez votre assurance automobile en quelques clics. 
+            Profitez aussi de nos services exclusifs : visite technique, entretien, réparation.
+            Simple, rapide et sécurisé.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/souscription">
@@ -65,57 +70,66 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Vehicle Types Carousel Section */}
+      <VehicleTypesCarousel />
+
       {/* Features Section with Images */}
       <section className="py-16 px-4 bg-gray-50">
         <div className="container mx-auto">
           <h3 className="text-3xl font-bold text-center text-blue-900 mb-12">
-            Pourquoi Choisir 2AL Insurance ?
+            Pourquoi Choisir 2AS ?
           </h3>
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="text-center border-blue-200 hover:shadow-lg transition-shadow overflow-hidden">
-              <div className="h-48 bg-cover bg-center" style={{
-                backgroundImage: `url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')`
-              }}></div>
+            <Card className="h-80 text-center border-blue-200 hover:shadow-lg transition-shadow overflow-hidden">
+              <div className="h-32 w-full flex items-center justify-center bg-gray-100">
+                <img
+                  src="/images/time.png"
+                  alt="Icône processus rapide"
+                  className="h-28 w-auto object-contain"
+                />
+              </div>
               <CardHeader>
-                <Shield className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                <CardTitle className="text-blue-900">Protection Complète</CardTitle>
+                <CardTitle className="text-blue-900">Processus rapide</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>
-                  Responsabilité civile, protection conducteur, vol, incendie... 
-                  Toutes les garanties pour votre tranquillité d'esprit.
+                  Souscription et renouvellement simplifiés pour vous faire gagner du temps.
                 </CardDescription>
               </CardContent>
             </Card>
 
-            <Card className="text-center border-blue-200 hover:shadow-lg transition-shadow overflow-hidden">
-              <div className="h-48 bg-cover bg-center" style={{
-                backgroundImage: `url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')`
-              }}></div>
+            <Card className="h-80 text-center border-blue-200 hover:shadow-lg transition-shadow overflow-hidden">
+              <div className="h-32 w-full flex items-center justify-center bg-gray-100">
+                <img
+                  src="/images/espace.png"
+                  alt="Icône processus rapide"
+                  className="h-28 w-auto object-contain"
+                />
+              </div>
               <CardHeader>
-                <FileText className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                <CardTitle className="text-blue-900">Souscription Rapide</CardTitle>
+                <CardTitle className="text-blue-900">Gestion facile</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>
-                  Formulaire simplifié, traitement immédiat et activation rapide 
-                  de votre police d'assurance.
+                  Accédez à toutes vos polices et détails importants depuis votre espace personnel.
                 </CardDescription>
               </CardContent>
             </Card>
 
-            <Card className="text-center border-blue-200 hover:shadow-lg transition-shadow overflow-hidden">
-              <div className="h-48 bg-cover bg-center" style={{
-                backgroundImage: `url('https://images.unsplash.com/photo-1649972904349-6e44c42644a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')`
-              }}></div>
+            <Card className="h-80 text-center border-blue-200 hover:shadow-lg transition-shadow overflow-hidden">
+              <div className="h-32 w-full flex items-center justify-center bg-gray-100">
+                <img
+                  src="/images/securite.png"
+                  alt="Icône processus rapide"
+                  className="h-28 w-auto object-contain"
+                />
+              </div>
               <CardHeader>
-                <Users className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                <CardTitle className="text-blue-900">Espace Personnel</CardTitle>
+                <CardTitle className="text-blue-900">Sécurisé</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription>
-                  Gérez vos polices, suivez vos demandes et accédez à tous 
-                  nos services depuis votre espace dédié.
+                  Vos informations sont protégées. Gérez vos assurances en toute confiance.
                 </CardDescription>
               </CardContent>
             </Card>
@@ -123,55 +137,19 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Services Section with Enhanced Visual Appeal */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto">
-          <h3 className="text-3xl font-bold text-center text-blue-900 mb-12">
-            Nos Services Complémentaires
-          </h3>
-          <div className="grid md:grid-cols-4 gap-6">
-            {[
-              { 
-                name: "Visite Technique", 
-                icon: Award,
-                image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-              },
-              { 
-                name: "TVM", 
-                icon: FileText,
-                image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-              },
-              { 
-                name: "Lavage Auto", 
-                icon: Shield,
-                image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-              },
-              { 
-                name: "Mécanique", 
-                icon: Users,
-                image: "https://images.unsplash.com/photo-1486754735734-325b5831c3ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-              }
-            ].map((service, index) => (
-              <Card key={index} className="text-center hover:shadow-md transition-shadow overflow-hidden">
-                <div className="h-32 bg-cover bg-center" style={{
-                  backgroundImage: `url('${service.image}')`
-                }}></div>
-                <CardHeader>
-                  <service.icon className="h-10 w-10 text-blue-600 mx-auto" />
-                  <CardTitle className="text-lg text-blue-900">{service.name}</CardTitle>
-                </CardHeader>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Service Types Carousel Section */}
+      <ServiceTypesCarousel />
+
+      {/* Partners Section */}
+      <PartnersSection />
+
 
       {/* CTA Section with Background */}
       <section className="relative py-16 px-4 bg-blue-900 text-white">
         <div 
           className="absolute inset-0 bg-blue-900 opacity-90"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80')`,
+            backgroundImage: `url('/images/voit.png')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -198,8 +176,8 @@ const Index = () => {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <Shield className="h-6 w-6 text-blue-400" />
-                <h4 className="text-xl font-bold">2AL Insurance</h4>
+                <img src="/images/logo2AL50.png" alt="Logo 2AL" />
+                <h4 className="text-xl font-bold">2AS</h4>
               </div>
               <p className="text-gray-400">
                 Votre partenaire de confiance pour l'assurance automobile.
@@ -231,11 +209,11 @@ const Index = () => {
               <div className="space-y-3 text-gray-400">
                 <div className="flex items-center space-x-2">
                   <Phone className="h-4 w-4" />
-                  <span>+228 70 44 33 22</span>
+                  <span>+228 90 80 14 66</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className="h-4 w-4" />
-                  <span>contact@2al-insurance.tg</span>
+                  <span>contact@autoassurservice.com</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <MapPin className="h-4 w-4" />
@@ -246,7 +224,7 @@ const Index = () => {
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 2AL Insurance. Tous droits réservés.</p>
+            <p>&copy; 2024 2AS. Tous droits réservés.</p>
           </div>
         </div>
       </footer>
