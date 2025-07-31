@@ -54,12 +54,14 @@ export function Navigation() {
   }
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200">
+    <header className="bg-blue-900 text-white shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
-            <Shield className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-bold text-blue-900">2AL Insurance</span>
+            <div className="flex items-center space-x-2">
+              <img src="/images/logo2AL50.png" alt="Logo Autas" className="w-10 h-10" />
+              <h1 className="text-2xl font-bold">Autas</h1>
+            </div>
           </Link>
 
           <div className="flex items-center space-x-4">

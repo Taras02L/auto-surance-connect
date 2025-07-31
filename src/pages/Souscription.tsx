@@ -62,10 +62,10 @@ const Souscription = () => {
 
   const insuranceCompanies = [
     "Sanlam",
-    "NSIA", 
-    "SUNU",
-    "GTA",
-    "Fidelia"
+    "SUNU", 
+    "NSIA",
+    "Fidelia",
+    "GTA"
   ];
 
   const contractDurations = [
@@ -300,8 +300,10 @@ const Souscription = () => {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <Link to="/" className="flex items-center space-x-2">
-                <Shield className="h-8 w-8 text-blue-300" />
-                <h1 className="text-2xl font-bold">2AL Insurance</h1>
+                <div className="flex items-center space-x-2">
+                  <img src="/images/logo2AL50.png" alt="Logo Autas" className="w-10 h-10" />
+                  <h1 className="text-2xl font-bold">Autas</h1>
+                </div>
               </Link>
               <Link to="/login">
                 <Button variant="outline" className="text-blue-900 border-white hover:bg-blue-100">
@@ -330,8 +332,10 @@ const Souscription = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-2">
-              <Shield className="h-8 w-8 text-blue-300" />
-              <h1 className="text-2xl font-bold">2AL Insurance</h1>
+            <div className="flex items-center space-x-2">
+              <img src="/images/logo2AL50.png" alt="Logo Autas" className="w-10 h-10" />
+              <h1 className="text-2xl font-bold">Autas</h1>
+            </div>
             </Link>
             <Link to="/login">
               <Button variant="outline" className="text-blue-900 border-white hover:bg-blue-100">

@@ -15,8 +15,8 @@ const Index = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <img src="/images/logo2AL50.png" alt="Logo 2AL" />
-              <h1 className="text-2xl font-bold">Auto Assur Services</h1>
+              <img src="/images/logo2AL50.png" alt="Logo Autas" className="w-10 h-10" />
+              <h1 className="text-2xl font-bold">Autas</h1>
             </div>
             <nav className="hidden md:flex items-center space-x-6">
               <Link to="/" className="hover:text-blue-300 transition-colors">Accueil</Link>
@@ -51,7 +51,7 @@ const Index = () => {
           }}
         ></div>
         <div className="container mx-auto text-center relative z-10">
-          <h1 className="text-2xl text-white mb-6">Bienvenue sur 2AS</h1>
+          <h1 className="text-2xl text-white mb-6">Bienvenue sur Autas</h1>
           <h2 className="text-5xl font-bold text-white mb-6">
             L’assurance automobile, réinventée pour vous
           </h2>
@@ -77,7 +77,7 @@ const Index = () => {
       <section className="py-16 px-4 bg-gray-50">
         <div className="container mx-auto">
           <h3 className="text-3xl font-bold text-center text-blue-900 mb-12">
-            Pourquoi Choisir 2AS ?
+            Pourquoi Choisir Autas ?
           </h3>
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="h-80 text-center border-blue-200 hover:shadow-lg transition-shadow overflow-hidden">
@@ -177,7 +177,7 @@ const Index = () => {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <img src="/images/logo2AL50.png" alt="Logo 2AL" />
-                <h4 className="text-xl font-bold">2AS</h4>
+                <h4 className="text-xl font-bold">Autas</h4>
               </div>
               <p className="text-gray-400">
                 Votre partenaire de confiance pour l'assurance automobile.

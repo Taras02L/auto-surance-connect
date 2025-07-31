@@ -19,10 +19,14 @@ export const insuranceRequests = [
 export const additionalServices = [
   { value: "technical_visit", label: "Visite technique" },
   { value: "tvm", label: "TVM" },
+  { value: "location", label: "Location de voiture" },
+  { value: "technical_visit", label: "Bon de carburant" },
   { value: "washing", label: "Lavage" },
   { value: "vulcanization", label: "Vulcanisation" },
   { value: "mechanics", label: "Mécanique" },
   { value: "electricity", label: "Électricité" },
   { value: "bodywork_painting", label: "Carrosserie-peinture" },
+  { value: "geo", label: "Géolocalisation" },
+  { value: "permis", label: "Permis de conduire" },
   { value: "other", label: "Autres" }
 ];

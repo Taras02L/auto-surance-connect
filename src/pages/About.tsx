@@ -21,7 +21,7 @@ const About = () => {
         ></div>
         <div className="container mx-auto text-center relative z-10">
           <h1 className="text-5xl font-bold text-white mb-6">
-            À Propos de 2AS
+            À Propos de Autas
           </h1>
           <p className="text-xl text-blue-100 max-w-3xl mx-auto">
             Votre partenaire de confiance pour l'assurance automobile au Togo.
@@ -122,7 +122,7 @@ const About = () => {
             </h2>
             <div className="bg-white rounded-lg shadow-lg p-8 border-l-4 border-blue-600">
               <p className="text-gray-600 leading-relaxed mb-6">
-                Fondée en 2014, 2AL Insurance est née de la vision de démocratiser l'accès 
+                Fondée en 2014, kpedenou assur née de la vision de démocratiser l'accès 
                 à l'assurance automobile au Togo. Nos fondateurs, conscients des défis que 
                 rencontraient les conducteurs togolais pour souscrire une assurance, ont créé 
                 une plateforme innovante et accessible.
