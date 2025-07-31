@@ -122,10 +122,11 @@ const About = () => {
             </h2>
             <div className="bg-white rounded-lg shadow-lg p-8 border-l-4 border-blue-600">
               <p className="text-gray-600 leading-relaxed mb-6">
-                Fondée en 2014, kpedenou assur née de la vision de démocratiser l'accès 
-                à l'assurance automobile au Togo. Nos fondateurs, conscients des défis que 
-                rencontraient les conducteurs togolais pour souscrire une assurance, ont créé 
-                une plateforme innovante et accessible.
+                Autas née de la vision de démocratiser l'accès 
+                à l'assurance automobile au Togo. Conscients des défis que 
+                rencontre les conducteurs togolais pour souscrire une assurance, déclarer un sinistre et faire le suivi
+                ; nous avons créer une plateforme innovante et accessible.
+  
               </p>
               <p className="text-gray-600 leading-relaxed mb-6">
                 Au fil des années, nous avons développé un écosystème complet de services 
